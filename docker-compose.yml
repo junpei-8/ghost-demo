@@ -8,12 +8,12 @@ services:
     ports:
       - ${GHOST_PORT}:2368
     environment:
+      NODE_ENV: development
       database__client: mysql
       database__connection__host: ${GHOST_DB_CONTAINER_NAME}
       database__connection__user: ${GHOST_DB_USERNAME}
       database__connection__password: ${GHOST_DB_PASSWORD}
       database__connection__database: ${GHOST_DB_NAME}
-      NODE_ENV: development
     volumes:
       - ./ghost:/var/lib/ghost/content
     depends_on:
@@ -32,4 +32,3 @@ services:
       MYSQL_ROOT_PASSWORD: ${GHOST_DB_PASSWORD}
     volumes:
       - ./.docker/${GHOST_DB_CONTAINER_NAME}:/var/lib/mysql
-
