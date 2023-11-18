@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  ghost:
+    container_name: ${GHOST_CONTAINER_NAME}
+    image: ghost:alpine
+    restart: always
+    ports:
+      - ${GHOST_PORT}:2368
+    environment:
+      database__client: mysql
+      database__connection__host: ${GHOST_DB_CONTAINER_NAME}
+      database__connection__user: ${GHOST_DB_USERNAME}
+      database__connection__password: ${GHOST_DB_PASSWORD}
+      database__connection__database: ${GHOST_DB_NAME}
+      NODE_ENV: development
+    volumes:
+      - ./ghost:/var/lib/ghost/content
+    depends_on:
+      - ghost-db
+
+  ghost-db:
+    container_name: ${GHOST_DB_CONTAINER_NAME}
+    image: mysql:latest
+    restart: always
+    ports:
+      - ${GHOST_DB_PORT}:3306
+    environment:
+      MYSQL_DATABASE: ${GHOST_DB_NAME}
+      MYSQL_USER: ${GHOST_DB_USERNAME}
+      MYSQL_PASSWORD: ${GHOST_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${GHOST_DB_PASSWORD}
+    volumes:
+      - ./.docker/${GHOST_DB_CONTAINER_NAME}:/var/lib/mysql
+
